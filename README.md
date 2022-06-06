@@ -2,7 +2,7 @@
 
 ## About ReadMe
 
-This contains the explanation of the rough draft version of project 2.
+This contains the explanation of project 2.
 
 ## Scientific Question
 
