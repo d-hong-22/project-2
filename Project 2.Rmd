@@ -1,0 +1,107 @@
+---
+title: "Project 2 Dahye Hong - Draft"
+output:
+  html_document:
+    df_print: paged
+---
+
+This is the rough draft of Project 2.
+
+# Introduction
+
+- Scientific question
+
+Given the similar functions of NOP2 and NAF1 gene, what are the similarities and differences in DNA sequence between 3 species (humann, mouse, and apes) and how do their 3D protein structures compare?
+
+- Background on the protein/gene/species of interest and where the data is sourced from
+
+In one of the studies, we found out that artificial rhythmic activity that mimics the human practice of meditation has affected the mice in the reduction of anxiety, and the results of such rhythmic activity on mice closely relate to the reduction in stress levels from human meditation research (Weible, 2017). We call this the meditation effect. Nop2 is expressed throughout the early mammalian embryo development in the preimplantation stage, specifically mouse. Nop2 is necessary for the embryo for the preservation of RNA in the organism and is crucial gene in maintaining the staibility in the embryo development (Cui, 2015).
+
+- Scientific hypothesis
+
+If the human meditation effect genes NOP2 and NAF1 and their derived protein structures are compared to other eukaryote organisms using bioinformatics methods, then the similarities in the gene sequences and protein structures will suggest positive upregulations in meditation effect genes and their biological processes.
+
+- Description of what analyses were done
+
+I will be looking at the NOP2 and NAF1 genes of three organisms, drawn from NCBI databases. Multiple sequence alignment is used when NOP2 gene sequences of humans, mice, and apes are compared. The result will show the regions of similarity and differences in the sequences, and using that, we can identify the areas that are conserved through evolutionary relationships or not. Also, we can use this information to support the gene processes in the three organisms. We can also use a pairwise sequence alignment is used when NOP2 and NAF1 genes are compared. We can create a heat map of the sequence alignment scores between each of the NOP1 and NAF1 sequences of all organisms. I have found three protein structures from PDB databases. The NAF1 domain of gene-derived proteins in humans and other eukaryotes are used in homology modeling and structural bioinformatics method. We can compare the protein structures in PyMol or R and then use structural bioinformatics to compare the structures or find similar or different regions. By doing so, we can visualize the protein structures for comparison and perform Normal Mode Analysis or Principal Component Analysis. Connecting to the scientific question, the similarity or difference in the protein structures of humans and other eukaryotes may suggest if other eukaryotes are also likely to express meditation effect related genes when they perform meditation.
+
+# Load in Packages
+
+These packages should be installed to run the analyses.
+
+```{r}
+# BiocManager - muscle package
+# BiocManager::install("muscle")
+library(BiocManager)
+library(muscle)
+library(Biostrings)
+# Seq in r package
+library(seqinr)
+# Bio3d package
+library(bio3d)
+# Multiple Sequence Alignment package
+# BiocManager::install("msa")
+library(msa)
+
+# install.packages("devtools")
+# devtools::install_bitbucket("Grantlab/bio3d-view")
+library(devtools)
+```
+
+The packages above are downloaded with the complementary packages as well.
+
+
+# Perform Bioinformatic Analyses
+
+## Pairwise Sequence Alignment
+
+```{r}
+# Set working directory of files
+setwd("~/Documents/2022 Spring/project2data")
+
+# Read fasta files into the variable named "gene_organism"
+NAF1gene_human <- read.fasta("NAF1gene_human.fna")
+NAF1gene_chimpanzee <- read.fasta("NAF1gene_chimpanzee.fna")
+NAF1gene_mouse <- read.fasta("NAF1gene_mouse.fna")
+NOP2gene_human <- read.fasta("NOP2gene_human.fna")
+NOP2gene_monkey <- read.fasta("NOP2gene_monkey.fna")
+NOP2gene_mouse <- read.fasta("NOP2gene_mouse.fna")
+
+```
+
+
+## Protein Structures
+
+```{r}
+library(bio3d.view)
+# install.packages("NGLVieweR")
+# install.packages("remotes")
+# remotes::install_github("nvelden/NGLVieweR")
+library(NGLVieweR)
+
+NGLVieweR("2EQN") %>%
+addRepresentation("cartoon")
+
+NGLVieweR("7VQA") %>%
+addRepresentation("cartoon")
+
+NGLVieweR("2V3M") %>%
+addRepresentation("cartoon")
+
+seq2eqn <- read.pdb("2EQN")
+coord1_2eqn <- seq2eqn$atom[1, c("x","y","z")]
+coord2_2eqn <- seq2eqn$atom[2, c("x","y","z")]
+measurements_2eqn <- dist.xyz(coord2_2eqn, coord1_2eqn)
+print(measurements_2eqn)
+
+seq2v3m <- read.pdb("2V3M")
+coord1_2v3m <- seq2v3m$atom[1, c("x","y","z")]
+coord2_2v3m <- seq2v3m$atom[2, c("x","y","z")]
+measurements_2v3m <- dist.xyz(coord2_2v3m, coord1_2v3m)
+print(measurements_2v3m)
+```
+
+
+# Analysis of Results
+
+The pairwise sequence alignment scores indicate the relatedness or similarity of the same NOP2 or NAF1 genes in between the organisms. The protein structures show that there are similarities in the overall formation and would have relationships considering the small differences in the tertiary structures. 
